@@ -15,13 +15,32 @@ history = []
 
 def load_history():
     global history
-    if os.path.exists(history_file):
-        with open(history_file, 'r', encoding='utf-8') as f:
-            history = json.load(f)
+    try:
+        if os.path.exists(history_file):
+            with open(history_file, 'r', encoding='utf-8') as f:
+                history = json.load(f)
+        else:
+            history = []
+    except json.JSONDecodeError:
+        messagebox.showerror("Ошибка", f"Файл {history_file} поврежден. Будет создан новый файл.")
+        history = []
+    except PermissionError:
+        messagebox.showerror("Ошибка", f"Нет доступа к файлу {history_file}")
+        history = []
+    except Exception as e:
+        messagebox.showerror("Ошибка", f"Не удалось загрузить историю: {str(e)}")
+        history = []
 
 def save_history():
-    with open(history_file, 'w', encoding='utf-8') as f:
-        json.dump(history, f, ensure_ascii=False, indent=2)
+    try:
+        with open(history_file, 'w', encoding='utf-8') as f:
+            json.dump(history, f, ensure_ascii=False, indent=2)
+    except PermissionError:
+        messagebox.showerror("Ошибка", f"Нет прав для записи в файл {history_file}")
+    except IOError as e:
+        messagebox.showerror("Ошибка", f"Ошибка ввода-вывода при сохранении: {str(e)}")
+    except Exception as e:
+        messagebox.showerror("Ошибка", f"Не удалось сохранить историю: {str(e)}")
 
 def add_to_history(quote):
     quote_copy = quote.copy()
