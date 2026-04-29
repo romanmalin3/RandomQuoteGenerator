@@ -5,6 +5,11 @@ import json
 import os
 from datetime import datetime
 
+quotes = [
+    {"text": "ЦИтата1", "author": "Автор1", "topic": "Тема1"},
+    {"text": "ЦИтата2", "author": "Автор2", "topic": "Тема2"}
+]
+
 history_file = "quote_history.json"
 history = []
 
